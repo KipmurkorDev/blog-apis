@@ -8,7 +8,7 @@ const createBlog=async (req, res)=>{
     const {title, content}=req.body
     console.log(res.locals.author);
     const author=res.locals.author
-    if(isEmpty(req.body)) return res.json({message: "The body should not be empty"})
+    if(isEmpty(req.body)) return res.status(400).json({message: "The body should not be empty"})
     const newPost= new blogSchema({ title,content,author})
     const results =await newPost.save()
     return res.status(200).json(results)
@@ -29,8 +29,8 @@ const editBlog = async (req, res)=>{
     try {
     const _id=req.params.blog_id
      const blog =await blogSchema.findOne({_id})
-     if(!blog) return res.json({message: "The blog requested does not exist or deleted"})
-     if(isEmpty(req.body)) return res.json({message: "The body should not be empty"})
+     if(!blog) return res.status(404).json({message: "Not found"})
+     if(isEmpty(req.body)) return res.status(400).json({message: "The body should not be empty"})
      const response = await blogSchema.updateOne({_id}, {$set:{...req.body}})
      return res.status(200).json(response);
     } catch (ex) {
@@ -41,7 +41,7 @@ const editBlog = async (req, res)=>{
     try {
     const _id=req.params.blog_id
      const blog =await blogSchema.findOne({_id})
-     if(!blog) return res.json({message: "The blog requested is already deleted"})
+     if(!blog) return res.status(404).json({message: "Not found"})
      const response = await blogSchema.deleteOne({_id})
      await commentSchema.deleteMany({blog:_id})
      return res.status(200).json(response);
@@ -54,6 +54,7 @@ const likeBlog= async (req, res)=>{
    try {
     const {blog_id}=req.params;
     const blog= await blogSchema.findOne({_id:blog_id});
+    if(!blog) return res.status(404).json({message: "Not found"})
     const blogLikesById = blog?.likes?.map(json => json._id.toString())
     const author=res.locals.author
 

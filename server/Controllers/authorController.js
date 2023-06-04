@@ -38,13 +38,13 @@ const loginAuthor = async (req, res) => {
           const token = jwt.sign({ fullName:user.fullName, email: user.email,author: user._id}, process.env.JWT_KEY, { expiresIn: "24h" });
           res.status(200).json({ token,message:"Successfull Login" });
         } else {
-          return res.status(400).json({ message: "Wrong Credentials" });
+          return res.status(401).json({ message: "Wrong Credentials" });
         }
       } else {
-        return res.status(400).json({ message: "User not found" });
+        return res.status(404).json({ message: "User not found" });
       }
     } catch (error) {
-      return res.status(400).json({ error: error.message });
+      return res.status(00).json({ error: error.message });
     }
   };
 
