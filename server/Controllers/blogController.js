@@ -19,7 +19,7 @@ const createBlog=async (req, res)=>{
 }
 const getAlLBlog = async (req, res)=>{
    try {
-    const results =await blogSchema.find({})
+    const results =await blogSchema.find({}).populate('author', 'email fullName')
     return res.status(200).json(results);
    } catch (ex) {
     return res.status(500).json({ error: ex.message });

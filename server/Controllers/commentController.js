@@ -6,17 +6,6 @@ const {isEmpty}=require('../Heplers/hepler')
 
 
 
-const getAllCommentByBlog=async (req, res)=>{
-     try {
-        const {blog_id}=req.params;
-        const getComments= await commentModel.find({blog:blog_id})
-        return res.status(200).json(getComments)
-     } catch (ex) {
-        console.error(ex);
-        return res.status(500).json({ error: ex.message });
-     }
-}
-
 
 const createComment=async (req, res)=>{
     try {
@@ -63,5 +52,5 @@ const deleteComment=async (req, res)=>{
 }
 
 module.exports={
-    createComment, editComment, deleteComment, getAllCommentByBlog
+    createComment, editComment, deleteComment
 }
